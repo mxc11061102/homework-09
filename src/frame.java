@@ -93,6 +93,19 @@ public class frame extends JApplet implements ActionListener{
 			count++;
 			ta.setText(find(Integer.parseInt(tfx.getText()),count,temp)+"\n"+"当前计算前"+ count +"行的数据"+"\n"+"矩阵区域为第"+"\n"+(list[1]+1)+"到"+(list[2]+1)+"列"+"\n"+findm(count)+"到"+list[5]+"行");
 			ta.paintImmediately(getBounds());
+			for(int j=0;j<6;j++)
+				for(int k=0;k<6;k++)
+				{
+					a[k][j].setBackground(Color.white);
+					a[k][j].paintImmediately(getBounds());
+				}
+			for(int j=list[1];j<list[2]+1;j++)
+				for(int k=list[4]-1;k<list[5];k++)
+				{
+					a[k][j].setBackground(Color.yellow);
+					a[k][j].paintImmediately(getBounds());
+				}
+			
 				try
 				{Thread.sleep(2000);
 				}catch(InterruptedException error)
@@ -111,12 +124,23 @@ public class frame extends JApplet implements ActionListener{
 				
 				}
 			ta.setText(find(Integer.parseInt(tfx.getText()),count,temp)+"\n"+"当前计算前"+ count +"行的数据"+"\n"+"矩阵区域为第"+"\n"+(list[1]+1)+"到"+(list[2]+1)+"列"+"\n"+findm(count)+"到"+list[5]+"行");
+			for(int j=0;j<6;j++)
+				for(int i=0;i<6;i++)
+					a[i][j].setBackground(Color.white);
+			for(int j=list[1];j<list[2]+1;j++)
+				for(int i=list[4]-1;i<list[5];i++)
+					a[i][j].setBackground(Color.yellow);
 			
 		}
 		else if(e.getSource().equals(bpre))
 		{
 			count--;
-			if(count<=0) ta.setText("ERROR");
+			if(count<=0) {
+				ta.setText("ERROR");
+				for(int j=0;j<6;j++)
+					for(int i=0;i<6;i++)
+						a[i][j].setBackground(Color.white);
+			}
 			else{
 			int temp[][]=new int[6][6];
 			for(int i=0;i<=count;i++)
@@ -126,6 +150,12 @@ public class frame extends JApplet implements ActionListener{
 				
 				}
 			ta.setText(find(Integer.parseInt(tfx.getText()),count,temp)+"\n"+"当前计算前"+ count +"行的数据"+"\n"+"矩阵区域为第"+"\n"+(list[1]+1)+"到"+(list[2]+1)+"列"+"\n"+findm(count)+"到"+list[5]+"行");
+			for(int j=0;j<6;j++)
+				for(int i=0;i<6;i++)
+					a[i][j].setBackground(Color.white);
+			for(int j=list[1];j<list[2]+1;j++)
+				for(int i=list[4]-1;i<list[5];i++)
+					a[i][j].setBackground(Color.yellow);
 			}
 		}
 			
