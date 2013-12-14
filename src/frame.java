@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
+
 
 public class frame extends JApplet implements ActionListener{
 	public static int count=0;
@@ -21,7 +21,7 @@ public class frame extends JApplet implements ActionListener{
 	private JPanel jplb=new JPanel();
 	private JPanel arr=new JPanel();
 	private JTextField[][] a=new JTextField[6][6];
-	private JTextArea ta=new JTextArea(10,20);
+	private JTextArea ta=new JTextArea(30,20);
 	
 	public frame()
 	{
@@ -35,7 +35,7 @@ public class frame extends JApplet implements ActionListener{
 		jpl.add(tfy);
 		
 		ta.setBackground(Color.yellow);
-		ta.setText("此处显示结果");
+		ta.setText("此处显示信息");
 		arr.setLayout(new GridLayout(6,6));
 		for(int i=0;i<6;i++)
 			for(int j=0;j<6;j++)
@@ -73,7 +73,7 @@ public class frame extends JApplet implements ActionListener{
 		{
 	
 		int l= find(x,y,b);
-		JOptionPane.showMessageDialog( this ,l);
+		JOptionPane.showMessageDialog( this ,"最终结果为"+l);
 		}
 		//*
 		else if(e.getSource().equals(btsleep))
@@ -91,8 +91,7 @@ public class frame extends JApplet implements ActionListener{
 			for(int i=0;i<y;i++)
 			{
 			count++;
-			ta.setText(find(Integer.parseInt(tfx.getText()),count,temp)+"\n"+"当前计算前"+ count +"行的数据"+"\n"+"矩阵区域为第"+"\n"+(list[1]+1)+"到"+(list[2]+1)+"列"+"\n"+findm(count)+"到"+list[5]+"行");
-			ta.paintImmediately(getBounds());
+			ta.setText("当前步骤答案为"+"	"+find(Integer.parseInt(tfx.getText()),count,temp)+"\n"+"当前计算前"+ count +"行的数据"+"\n"+"矩阵区域为第"+"\n"+(list[1]+1)+"到"+(list[2]+1)+"列（如图所示）"+"\n"+findm(count)+"到"+list[5]+"行（如图所示）");
 			for(int j=0;j<6;j++)
 				for(int k=0;k<6;k++)
 				{
@@ -105,7 +104,14 @@ public class frame extends JApplet implements ActionListener{
 					a[k][j].setBackground(Color.yellow);
 					a[k][j].paintImmediately(getBounds());
 				}
-			
+			ta.append("\n"+"临时数组如下"+"\n");
+			for(int j=0;j<((count+1)*count/2);j++)
+				{
+				for(int t=0;t<Integer.parseInt(tfx.getText());t++)		
+					ta.append(c[j][t]+"    ");
+				ta.append("\n");
+				}
+			ta.paintImmediately(getBounds());
 				try
 				{Thread.sleep(2000);
 				}catch(InterruptedException error)
@@ -116,6 +122,20 @@ public class frame extends JApplet implements ActionListener{
 		else if(e.getSource().equals(bnext))
 		{
 			count++;
+			if(count<0) {
+				ta.setText("倒退的太多了！ERROR！！！！！！！！！");
+				for(int j=0;j<6;j++)
+					for(int i=0;i<6;i++)
+						a[i][j].setBackground(Color.white);
+			}
+			else if	(count==0) {
+				ta.setText("已回到初始状态");
+				for(int j=0;j<6;j++)
+					for(int i=0;i<6;i++)
+						a[i][j].setBackground(Color.white);
+			}
+			else
+			{
 			int temp[][]=new int[6][6];
 			for(int i=0;i<count;i++)
 				for(int j=0;j<6;j++)
@@ -123,24 +143,39 @@ public class frame extends JApplet implements ActionListener{
 					temp[i][j]=b[i][j];
 				
 				}
-			ta.setText(find(Integer.parseInt(tfx.getText()),count,temp)+"\n"+"当前计算前"+ count +"行的数据"+"\n"+"矩阵区域为第"+"\n"+(list[1]+1)+"到"+(list[2]+1)+"列"+"\n"+findm(count)+"到"+list[5]+"行");
+			ta.setText("当前步骤答案为"+"	"+find(Integer.parseInt(tfx.getText()),count,temp)+"\n"+"当前计算前"+ count +"行的数据"+"\n"+"矩阵区域为第"+"\n"+(list[1]+1)+"到"+(list[2]+1)+"列（如图所示）"+"\n"+findm(count)+"到"+list[5]+"行（如图所示）");
 			for(int j=0;j<6;j++)
 				for(int i=0;i<6;i++)
 					a[i][j].setBackground(Color.white);
 			for(int j=list[1];j<list[2]+1;j++)
 				for(int i=list[4]-1;i<list[5];i++)
 					a[i][j].setBackground(Color.yellow);
+			ta.append("\n"+"临时数组如下"+"\n");
+			for(int j=0;j<((count+1)*count/2);j++)
+				{
+				for(int i=0;i<Integer.parseInt(tfx.getText());i++)		
+					ta.append(c[j][i]+"    ");
+				ta.append("\n");
+				}
+			}
 			
 		}
 		else if(e.getSource().equals(bpre))
 		{
 			count--;
-			if(count<=0) {
-				ta.setText("ERROR");
+			if(count<0) {
+				ta.setText("倒退的太多了！ERROR！！！！！！！！！");
 				for(int j=0;j<6;j++)
 					for(int i=0;i<6;i++)
 						a[i][j].setBackground(Color.white);
 			}
+			else if	(count==0) {
+				ta.setText("已回到初始状态");
+				for(int j=0;j<6;j++)
+					for(int i=0;i<6;i++)
+						a[i][j].setBackground(Color.white);
+			}
+			
 			else{
 			int temp[][]=new int[6][6];
 			for(int i=0;i<=count;i++)
@@ -149,13 +184,20 @@ public class frame extends JApplet implements ActionListener{
 					temp[i][j]=b[i][j];
 				
 				}
-			ta.setText(find(Integer.parseInt(tfx.getText()),count,temp)+"\n"+"当前计算前"+ count +"行的数据"+"\n"+"矩阵区域为第"+"\n"+(list[1]+1)+"到"+(list[2]+1)+"列"+"\n"+findm(count)+"到"+list[5]+"行");
+			ta.setText("当前步骤答案为"+"	"+find(Integer.parseInt(tfx.getText()),count,temp)+"\n"+"当前计算前"+ count +"行的数据"+"\n"+"矩阵区域为第"+"\n"+(list[1]+1)+"到"+(list[2]+1)+"列（如图所示）"+"\n"+findm(count)+"到"+list[5]+"行（如图所示）");
 			for(int j=0;j<6;j++)
 				for(int i=0;i<6;i++)
 					a[i][j].setBackground(Color.white);
 			for(int j=list[1];j<list[2]+1;j++)
 				for(int i=list[4]-1;i<list[5];i++)
 					a[i][j].setBackground(Color.yellow);
+			ta.append("\n"+"临时数组如下"+"\n");
+			for(int j=0;j<((count+1)*count/2);j++)
+				{
+				for(int i=0;i<Integer.parseInt(tfx.getText());i++)		
+					ta.append(c[j][i]+"    ");
+				ta.append("\n");
+				}
 			}
 		}
 			
