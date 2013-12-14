@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
 
 public class frame extends JApplet implements ActionListener{
@@ -13,6 +15,8 @@ public class frame extends JApplet implements ActionListener{
 	private JButton btsleep=new JButton("自动执行");
 	private JButton bnext=new JButton("下一步");
 	private JButton bpre=new JButton("上一步");
+	private JButton bopen=new JButton("打开");
+	private JButton brandom=new JButton("随机生成");
 	private JLabel lbx=new JLabel("x长度");
 	private JLabel lby=new JLabel("y长度");			
 	private JTextField tfx=new JTextField(2);
@@ -33,7 +37,8 @@ public class frame extends JApplet implements ActionListener{
 		jpl.add(tfx);
 		jpl.add(lby);
 		jpl.add(tfy);
-		
+		jpl.add(bopen);
+		jpl.add(brandom);
 		ta.setBackground(Color.yellow);
 		ta.setText("此处显示信息");
 		arr.setLayout(new GridLayout(6,6));
@@ -43,12 +48,14 @@ public class frame extends JApplet implements ActionListener{
 			a[i][j]=new JTextField(2);
 			arr.add(a[i][j]);
 		}
-		jpl.setSize(50,20);
+		jpl.setSize(20,20);
 		jplb.setSize(50,20);
 		bt.addActionListener(this);
 		bnext.addActionListener(this);
 		bpre.addActionListener(this);
 		btsleep.addActionListener(this);
+		bopen.addActionListener(this);
+		brandom.addActionListener(this);
 		this.add(jplb);		
 		this.add(jpl);
 		this.add(arr);
@@ -56,9 +63,16 @@ public class frame extends JApplet implements ActionListener{
 		this.setLayout(fl);
 		this.setSize(300,300);
 		this.setVisible(true);
-		}
+	}
 	public void actionPerformed(ActionEvent e){
-
+		if(e.getSource().equals(bopen))
+		{
+				open();
+		}
+		if(e.getSource().equals(brandom))
+		{
+				ran();
+		}
 		int x=Integer.parseInt(tfx.getText());
 		int y=Integer.parseInt(tfy.getText());		 
 		for(int i=0;i<y;i++)
@@ -75,7 +89,7 @@ public class frame extends JApplet implements ActionListener{
 		int l= find(x,y,b);
 		JOptionPane.showMessageDialog( this ,"最终结果为"+l);
 		}
-		//*
+
 		else if(e.getSource().equals(btsleep))
 		{
 	
@@ -240,7 +254,6 @@ public class frame extends JApplet implements ActionListener{
 				  		flagfront=i;
 				  		flaglast=j;
 				  		list[3]=m;
-				  		System.out.println(list[3]);
 				  	}
 			  }
 		   }
@@ -264,7 +277,41 @@ public class frame extends JApplet implements ActionListener{
 				list[4]=i-rowsub+1;
 				list[5]=i+1;
 			}
-	return list[4];
-		
+	return list[4];		
+	}
+	public void open()
+	{
+		try{
+		int[][] arr = new int[10][10];
+		JFileChooser chooser = new JFileChooser(".");
+		chooser.showOpenDialog(null); 
+		File file = chooser.getSelectedFile();
+		BufferedReader in = new BufferedReader(new FileReader(file));  //
+		  String line;  //一行数据
+		  int row=0;
+		  //逐行读取，并将每个数组放入到数组中
+		  while((line = in.readLine()) != null){
+		   String[] temp = line.split(",");  
+		   for(int j=0;j<temp.length;j++){
+		    arr[row][j] = Integer.parseInt(temp[j]);
+		   }
+		   row++;
+		  }
+		  in.close();
+		  tfx.setText(""+arr[0][1]);
+		  tfy.setText(""+arr[0][0]);
+		  for(int i=0;i<Integer.parseInt(tfy.getText());i++)
+			  for(int j=0;j<Integer.parseInt(tfx.getText());j++)
+			  {
+				  a[i][j].setText(""+arr[i+1][j]);
+			  }
+	}catch(Exception err){}
+	}
+	public void ran()
+	{
+		Random rdm=new Random();		
+		  for(int i=0;i<Integer.parseInt(tfy.getText());i++)
+			  for(int j=0;j<Integer.parseInt(tfx.getText());j++)
+				  a[i][j].setText(""+rdm.nextInt()%20);		
 	}
 }
